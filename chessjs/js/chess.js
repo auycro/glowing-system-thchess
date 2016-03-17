@@ -1,5 +1,9 @@
 'use strict';
-/*
+/* 
+ * Clone and change to Thai Chess
+ * Copyright (c) 2016, auycro
+ * All rights reserved.
+ * 
  * Copyright (c) 2015, Jeff Hlywa (jhlywa@gmail.com)
  * All rights reserved.
  *
@@ -58,12 +62,16 @@ var Chess = function(fen) {
 
   var PAWN_OFFSETS = {
     b: [16, 17, 15],
-    w: [-16,-17, -15]
+    w: [-16, -17, -15]
+  };
+
+  var BISHOP_OFFSETS = {
+    b: [-17, -15,  17, 16, 15],
+    w: [-17, -16, -15, 17, 15]
   };
 
   var PIECE_OFFSETS = {
     n: [-18, -33, -31, -14,  18, 33, 31,  14],
-    b: [-17, -15, -16,  17,  16, 15],
     r: [-16,   1,  16,  -1],
     q: [-17, -15,  17,  15],
     k: [-17, -16, -15,   1,  17, 16, 15,  -1]
@@ -485,7 +493,7 @@ var Chess = function(fen) {
     var moves = [];
     var us = turn;
     var them = swap_color(us);
-    var second_rank = {b: RANK_7, w: RANK_2};
+    //var second_rank = {b: RANK_7, w: RANK_2};
 
     var first_sq = SQUARES.a8;
     var last_sq = SQUARES.h1;
@@ -520,12 +528,6 @@ var Chess = function(fen) {
         var square = i + PAWN_OFFSETS[us][0];
         if (board[square] == null) {
             add_move(board, moves, i, square, BITS.NORMAL);
-
-          /* double square */
-          var square = i + PAWN_OFFSETS[us][1];
-          if (second_rank[us] === rank(i) && board[square] == null) {
-            add_move(board, moves, i, square, BITS.BIG_PAWN);
-          }
         }
 
         /* pawn captures */
@@ -533,14 +535,37 @@ var Chess = function(fen) {
           var square = i + PAWN_OFFSETS[us][j];
           if (square & 0x88) continue;
 
+          console.log(them)
+
           if (board[square] != null &&
               board[square].color === them) {
+              console.log(square);
               add_move(board, moves, i, square, BITS.CAPTURE);
-          } else if (square === ep_square) {
-              add_move(board, moves, i, ep_square, BITS.EP_CAPTURE);
           }
         }
-      } else {
+      } else if (piece.type === BISHOP) {
+        /*BISHOP*/
+        for (j = 0, len = BISHOP_OFFSETS[us].length; j < len; j++) {
+          var offset = BISHOP_OFFSETS[us][j];
+          var square = i;
+
+          while (true) {
+            square += offset;
+            if (square & 0x88) break;
+
+            if (board[square] == null) {
+              add_move(board, moves, i, square, BITS.NORMAL);
+            } else {
+              if (board[square].color === us) break;
+              add_move(board, moves, i, square, BITS.CAPTURE);
+              break;
+            }
+
+            /* break, if knight or king */
+            if (piece.type === 'b') break;
+          }
+        }
+      }else {
         for (var j = 0, len = PIECE_OFFSETS[piece.type].length; j < len; j++) {
           var offset = PIECE_OFFSETS[piece.type][j];
           var square = i;
@@ -558,7 +583,7 @@ var Chess = function(fen) {
             }
 
             /* break, if knight or king */
-            if (piece.type === 'n' || piece.type === 'k' || piece.type === 'q' || piece.type === 'b') break;
+            if (piece.type === 'n' || piece.type === 'k' || piece.type === 'q') break;
           }
         }
       }
