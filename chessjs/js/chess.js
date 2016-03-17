@@ -531,15 +531,11 @@ var Chess = function(fen) {
         }
 
         /* pawn captures */
-        for (j = 2; j < 4; j++) {
+        for (j = 1; j < 3; j++) {
           var square = i + PAWN_OFFSETS[us][j];
           if (square & 0x88) continue;
-
-          console.log(them)
-
           if (board[square] != null &&
               board[square].color === them) {
-              console.log(square);
               add_move(board, moves, i, square, BITS.CAPTURE);
           }
         }
