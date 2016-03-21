@@ -106,6 +106,9 @@ var updateStatus = function() {
   statusEl.html(status);
   fenEl.html(game.fen());
   pgnEl.html(game.pgn());
+
+  //console.log(game.moves());
+  //console.log(game.perft(1));
 };
 
 var cfg = {

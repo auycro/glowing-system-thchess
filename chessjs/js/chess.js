@@ -557,7 +557,7 @@ var Chess = function(fen) {
               break;
             }
 
-            /* break, if knight or king */
+            /* break, if bishop */
             if (piece.type === 'b') break;
           }
         }
@@ -710,16 +710,34 @@ var Chess = function(fen) {
         /* if the piece is a knight or a king */
         if (piece.type === 'n' || piece.type === 'k') return true;
 
-        var offset = RAYS[index];
-        var j = i + offset;
+        if (piece.type === 'r') {
+          var offset = RAYS[index];
+          var j = i + offset;
 
-        var blocked = false;
-        while (j !== square) {
-          if (board[j] != null) { blocked = true; break; }
-          j += offset;
+          var blocked = false;
+          while (j !== square) {
+            if (board[j] != null) { blocked = true; break; }
+            j += offset;
+          }
+
+          if (!blocked) return true;  
         }
+      }
 
-        if (!blocked) return true;
+      if (piece.type === 'b') {
+        var offset = BISHOP_OFFSETS[color];
+        for (var j=0; j < offset.length; j++){
+          var attack_point = i + offset[j];
+          if (attack_point === square) return true;
+        }
+      }
+
+      if (piece.type === 'q') {
+        var offset = PIECE_OFFSETS[piece.type];
+        for (var j=0; j < offset.length; j++){
+          var attack_point = i + offset[j];
+          if (attack_point === square) return true;
+        }
       }
     }
 
