@@ -9,9 +9,21 @@
     
   </head>
   <body>
+<script>
+function test_move(piece_move) {
+    console.log(piece_move);
+    //console.log(game.move(piece_move));
+    game.move(piece_move);
+    board.position(game.fen());
+    //updateStatus();
+    //game.move(piece_move);
+}
+</script>
     <div id="board" style="width: 400px"></div>
 	<p>Status: <span id="status"></span></p>
 	<p>FEN: <span id="fen"></span></p>
 	<p>PGN: <span id="pgn"></span></p>
+
+<button onclick="test_move('e4')">Click me</button>
   </body>
 </html>

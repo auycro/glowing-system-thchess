@@ -1,11 +1,12 @@
+//Make Global;
+var game = new Chess();
+var board;
+
 var init = function() {
-var board,
-  statusEl = $('#status'),
+var  statusEl = $('#status'),
   fenEl = $('#fen'),
   pgnEl = $('#pgn'),
   TH_CHESS_DEFAULT_POSITION = 'rnbqkbnr/8/pppppppp/8/8/PPPPPPPP/8/RNBKQBNR';
-
-var game = new Chess();
 
 var removeGreySquares = function() {
   $('#board .square-55d63').css('background', '');
