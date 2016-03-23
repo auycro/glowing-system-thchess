@@ -2,10 +2,11 @@
   <head>
     <link rel="stylesheet" href="css/chessboard-0.3.0.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
     <script src="/js/thchess.js"></script>
     <script src="/js/chessboard.js"></script>
+    <script src="/js/client.js"></script>
     <script src="/js/game.js"></script>
-     <script src="/socket.io/socket.io.js"></script>
   </head>
   <body>
   <script>
@@ -15,16 +16,16 @@
     board.position(game.fen());
     updateStatus();
   }
-  var socket = io();
+  
   function test_send(message){
     socket.emit('message', message);
+    Client.Hello();
   }
   </script>
   <div id="board" style="width: 400px"></div>
 	<p>Status: <span id="status"></span></p>
 	<p>FEN: <span id="fen"></span></p>
 	<p>PGN: <span id="pgn"></span></p>
-  <button onclick="test_move('e4')">Test Move</button>
-  <button onclick="test_send('e4')">Test Socket</button>
+  <!--button onclick="test_send('e4')">Test Socket</button-->
   </body>
 </html>

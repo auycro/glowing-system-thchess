@@ -1,19 +1,3 @@
-/*
-var initGame = function () {
-    var cfg = {
-        draggable: true,
-        position: 'start',
-        onDrop: handleMove,
-    };
- 
-    board = new ChessBoard('gameBoard', cfg);
-    game = new Chess();
-}
- 
-var handleMove = function(source, target) {
-    var move = game.move({from: source, to: target});
-}
-*/
 'use strict';
 
 var game = new Chess();
@@ -55,6 +39,7 @@ var onDrop = function(source, target) {
   // illegal move
   if (move === null) return 'snapback';
 
+  Client.SendMove(move);
   updateStatus();
 };
 
@@ -136,7 +121,9 @@ var init = function() {
 
   board = ChessBoard('board', cfg);
 
-	updateStatus();  	
+	updateStatus();  
+
+  Client.Init();	
 };
 
 $(document).ready(init);
