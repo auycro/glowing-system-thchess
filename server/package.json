@@ -2,7 +2,7 @@
   "name": "thchess",
   "version": "1.0.0",
   "description": "Thai Chess JS",
-  "main": "app.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -18,5 +18,8 @@
   "dependencies": {
     "express": "^4.13.4",
     "socket.io": "^1.4.5"
+  }
+  "engines": {
+    "node": "5.6.0"
   }
 }
