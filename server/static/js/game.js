@@ -1,7 +1,9 @@
 'use strict';
 
-var game = new Chess();
+var game;
 var board;
+var player_color;
+var serverGame;
 
 var greySquare = function(square) {
 	var squareEl = $('#board .square-' + square);
@@ -23,7 +25,8 @@ var removeGreySquares = function() {
 var onDragStart = function(source, piece, position, orientation) {
   if (game.game_over() === true ||
       (game.turn() === 'w' && piece.search(/^b/) !== -1) ||
-      (game.turn() === 'b' && piece.search(/^w/) !== -1)) {
+      (game.turn() === 'b' && piece.search(/^w/) !== -1) ||
+      (game.turn() !== player_color[0])) {
     return false;
   }
 };
@@ -39,7 +42,7 @@ var onDrop = function(source, target) {
   // illegal move
   if (move === null) return 'snapback';
 
-  Client.SendMove(move);
+  SendMove(move);
   updateStatus();
 };
 
@@ -53,12 +56,14 @@ var onMouseoverSquare = function(square, piece) {
   // exit if there are no moves available for this square
   if (moves.length === 0) return;
 
-  // highlight the square they moused over
-  greySquare(square);
+  if (game.turn() == player_color[0]) {
+    // highlight the square they moused over
+    greySquare(square);
 
-  // highlight the possible squares for this piece
-  for (var i = 0; i < moves.length; i++) {
-    greySquare(moves[i].to);
+    // highlight the possible squares for this piece
+    for (var i = 0; i < moves.length; i++) {
+      greySquare(moves[i].to);
+    }
   }
 };
 
@@ -105,13 +110,16 @@ var updateStatus = function() {
   $('#pgn').html(game.pgn());
 };
 
-var init = function() {
+var init = function(serverGameState) {
+  serverGame = serverGameState; 
+
 	var	TH_CHESS_DEFAULT_POSITION = 'rnbqkbnr/8/pppppppp/8/8/PPPPPPPP/8/RNBKQBNR';
 
   var cfg = {
+    orientation: player_color,
+    position: serverGameState.board ? serverGame.board : TH_CHESS_DEFAULT_POSITION,
     draggable: true,
     dropOffBoard: 'snapback',
-    position: TH_CHESS_DEFAULT_POSITION, 
     onMouseoutSquare: onMouseoutSquare,
     onMouseoverSquare: onMouseoverSquare,
     onDragStart: onDragStart,
@@ -119,11 +127,10 @@ var init = function() {
     onSnapEnd: onSnapEnd,
   };
 
-  board = ChessBoard('board', cfg);
+  game = serverGame.board ? new Chess(serverGame.board) : new Chess();
+  board =  new ChessBoard('board', cfg);
 
-	updateStatus();  
-
-  Client.Init();	
+	updateStatus();
 };
 
 $(document).ready(init);
