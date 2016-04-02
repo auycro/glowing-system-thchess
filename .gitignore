@@ -5,3 +5,5 @@ server/node_modules
 # Logs
 *.log
 npm-debug.log*
+.DS_Store
+/*.env
