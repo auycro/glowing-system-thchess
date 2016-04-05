@@ -60,6 +60,7 @@ io.on('connection', function(socket) {
                     game.users.white = socket.userId;
                     users[game.users.white].games[game.id] = game.id;
                     socket.emit('startgame', {game: game, color: 'white'});
+
                     open_new_game = false;
                 } else if (game.users.black == null) {
                     game.users.black = socket.userId;
@@ -74,28 +75,6 @@ io.on('connection', function(socket) {
                     break;
                 }
             }
-            /*
-            openGames.forEach(function(game) {
-                console.log("game.id" + game.id);
-                if (game.users.white == null) {
-                    socket.gameId = game.id;
-                    game.users.white = socket.userId;
-                    users[game.users.white].games[game.id] = game.id;
-                    socket.emit('startgame', {game: game, color: 'white'});
-                    open_new_game = false;
-                } else if (game.users.black == null) {
-                    game.users.black = socket.userId;
-                    users[game.users.black].games[game.id] = game.id;
-                    socket.emit('startgame', {game: game, color: 'black'});
-                    open_new_game = false;
-                }
-
-                if (open_new_game == false) {
-                    delete openGames[game.id];
-                    activeGames[game.id] = game;
-                }
-            });
-            */
         }
 
         //NEW GAME
@@ -124,7 +103,7 @@ io.on('connection', function(socket) {
     });
 
     socket.on('move', function(move) {
-        console.log('Got move from client: ' + move.color);
+        console.log('Got move from client: ' + move.move);
         socket.broadcast.emit('move', move);
         activeGames[move.gameId].board = move.board;
         //game_id = users[socket.userId].gameid;

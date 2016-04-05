@@ -11,10 +11,9 @@ socket.on('startgame', function (res){
 
   player_color = res.color;
   init(res.game);
-        
-    $('#page-opening').hide();
-    $('#page-game').show();
 
+  $('#page-opening').hide();
+  $('#page-game').show();
 });
 socket.on('move', function (move) {
   if (serverGame && move.gameId === serverGame.id) {
