@@ -113,6 +113,7 @@ var updateStatus = function() {
 };
 
 var cfg = {
+  pieceTheme: 'img/chesspieces/PlayOK/{piece}.png',
   draggable: true,
   dropOffBoard: 'snapback',
   //position: 'start',
